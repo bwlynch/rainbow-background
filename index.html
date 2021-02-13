@@ -1,55 +1,71 @@
 <!DOCTYPE html>
 <html>
-<body onload="myFunction()">
+<head><style>
+body {
+  text-align: center;
+}
+p {
+  font-size: 16px;
+} 
+</style></head>
 
-<h2>Color-Changing Background</h2>
 
+<body onload="colorChanging()">
+
+<h1>Color-Changing Background</h1>
+
+<!--By default the paragraphs below are blank lines, but sections of the javascript can be uncommented to fill these with metrics on the current color values and the place in the cycle--> 
 <p id="number"></p>
-<p id="color"></p>
+<p id="backgroundcolor"></p>
 <p id="textcolor"></p>
 
 <script>
-function myFunction() {
-setInterval(function(){ 
+function colorChanging() {
+setInterval(function(){ // As defined below, this function is called every millisecond in order to provide near continuous updates on the current time
   var date = new Date();
   var time = date.getTime();
+
+  /* Increasing or decreasing the value of 'rate' inversely changes the speed of the color cycle. The full cycle takes 1530 steps (represented by the counter s) to complete, as 1530 is 255 * 6, allowing for each portion of r, g, b to take turns cycling from 0 to 255 and later back to 0. The default rate of 100 converts the time from milliseconds to tenths of a second, meaning it willl take 153.0 seconds to go through the whole cycle. */
   var rate = 100;
-  var p = Math.floor((time/rate) % 1530);
+  var s = Math.floor((time/rate) % 1530);
+
   var red = "ff";
   var green = "ff";
   var blue = "ff";
-  if (p < 255) {
+
+   /* The if statements generate the background color value by setting the r, g, and b values in 6 stages. At any given point in a stage, one color is at 00, one is at ff, and either the color before ff is decreasing or the value after it is increasing. So for example red starts fixed at ff while blue is fixed at 00 and green goes up from 00 to ff, then red goes down to 00 (while green and blue stay constant), then blue goes up to ff, then green goes down to 00, etc. */
+  if (s < 255) {
     red = "ff";
-    green = p.toString(16);
+    green = s.toString(16);
     blue = "00";
   }
-  if (p >= 255 && p < 510) {
-    red = (510 - p).toString(16);
+  else if (s >= 255 && s < 510) {
+    red = (510 - s).toString(16);
     green = "ff";
     blue = "00";
   }
-  if (p >= 510 && p < 765) {
+  else if (s >= 510 && s < 765) {
     red = "00";
     green = "ff";
-    blue = (p - 510).toString(16);
+    blue = (s - 510).toString(16);
   }
-  if (p >= 765 && p < 1020) {
+  else if (s >= 765 && s < 1020) {
     red = "00";
-    green = (1020 - p).toString(16);
+    green = (1020 - s).toString(16);
     blue = "ff";
   }  
-  if (p >= 1020 && p < 1275) {
-    red = (p - 1020).toString(16);
+  else if (s >= 1020 && s < 1275) {
+    red = (s - 1020).toString(16);
     green = "00";
     blue = "ff";
   }
-  if (p >= 1275 && p < 1530) {
+  else if (s >= 1275 && s < 1530) {
     red = "ff";
     green = "00";
-    blue = (1530 - p).toString(16);
+    blue = (1530 - s).toString(16);
   }
 
-
+  //inverts a portion of r, g, or b by subtracting it from 255 (ff in hex) - e.g. inverse of ff is 00; bb = 187 in decimal, 255 - 187 = 68, and 68 in hex is 44. So 44 is the inverse color value of bb. 
   function invert(color) {
     inverted = 255 - parseInt(color, 16);
     hex = inverted.toString(16);
@@ -57,18 +73,21 @@ setInterval(function(){
     else {return hex;}
   }
 
+  //gets the inverse color of each component of the the background color to provide contrast for the text
   var textRed = invert(red);
   var textGreen = invert(green);
   var textBlue = invert(blue);
 
-  document.getElementById("textcolor").innerHTML = "#" + textRed + textGreen + textBlue;
-  document.body.style.color = "#" + textRed + textGreen + textBlue;  
-  const hexp = p.toString(16);
-  document.getElementById("number").innerHTML = "Counter: " + p;
-  document.getElementById("color").innerHTML = "color: #" + red + green + blue + " (red: " + red + " green: " + green + " blue: " + blue + ")";  
+  //Sets the background and text color
+  document.body.style.color = "#" + textRed + textGreen + textBlue; //this line can be commented out to keep the text black
   document.body.style.backgroundColor = "#" + red + green + blue; 
-}, 1);
-}
+
+
+  //document.getElementById("number").innerHTML = "Counter: " + s + " out of 1530"; //Displays a counter indicating where in the cycle it is currently at
+  //document.getElementById("textcolor").innerHTML = "Text Color: #" + textRed + textGreen + textBlue; //Reads out the current color of the text 
+  //document.getElementById("backgroundcolor").innerHTML = "Background Color: #" + red + green + blue + " (red: " + red + " green: " + green + " blue: " + blue + ")"; // Reads out the current color of the background 
+
+  }, 1);} //closes both functions, sets in milliseconds the interval for which the change color function is called. The interval can be increased from its current value without issue, but it must be less than the value of 'rate' to avoid lag.
 </script>
 
 </body>
