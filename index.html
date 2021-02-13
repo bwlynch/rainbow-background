@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<body onload="myFunction()">
+
+<h2>Color-Changing Background</h2>
+
+<p id="number"></p>
+<p id="color"></p>
+
+<script>
+function myFunction() {
+setInterval(function(){ 
+  var date = new Date();
+  var time = date.getTime();
+  var rate = 100;
+  var p = Math.floor((time/rate) % 1530);
+  var red = "ff";
+  var green = "ff";
+  var blue = "ff";
+  if (p < 255) {
+    red = "ff";
+    green = p.toString(16);
+    blue = "00";
+  }
+  if (p >= 255 && p < 510) {
+    red = (510 - p).toString(16);
+    green = "ff";
+    blue = "00";
+  }
+  if (p >= 510 && p < 765) {
+    red = "00";
+    green = "ff";
+    blue = (p - 510).toString(16);
+  }
+  if (p >= 765 && p < 1020) {
+    red = "00";
+    green = (1020 - p).toString(16);
+    blue = "ff";
+  }  
+  if (p >= 1020 && p < 1275) {
+    red = (p - 1020).toString(16);
+    green = "00";
+    blue = "ff";
+  }
+  if (p >= 1275 && p < 1530) {
+    red = "ff";
+    green = "00";
+    blue = (1530 - p).toString(16);
+  }
+
+  //document.getElementById("number").innerHTML
+  //document.body.style.color = "#" + (255 - parseInt(red, 16)).toString(16) + (255 - parseInt(green, 16)).toString(16) + (255 - parseInt(blue, 16)).toString(16);  
+  const hexp = p.toString(16);
+  //document.getElementById("number").innerHTML = p;
+  document.getElementById("color").innerHTML = "color: #" + red + green + blue + " (red: " + red + " green: " + green + " blue: " + blue + ")";  
+  document.body.style.backgroundColor = "#" + red + green + blue; 
+}, 1);
+}
+</script>
+
+</body>
+</html>
+
