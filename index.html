@@ -6,6 +6,7 @@
 
 <p id="number"></p>
 <p id="color"></p>
+<p id="textcolor"></p>
 
 <script>
 function myFunction() {
@@ -48,10 +49,22 @@ setInterval(function(){
     blue = (1530 - p).toString(16);
   }
 
-  //document.getElementById("number").innerHTML
-  //document.body.style.color = "#" + (255 - parseInt(red, 16)).toString(16) + (255 - parseInt(green, 16)).toString(16) + (255 - parseInt(blue, 16)).toString(16);  
+
+  function invert(color) {
+    inverted = 255 - parseInt(color, 16);
+    hex = inverted.toString(16);
+    if (inverted < 16) {return ("0" + hex);}
+    else {return hex;}
+  }
+
+  var textRed = invert(red);
+  var textGreen = invert(green);
+  var textBlue = invert(blue);
+
+  document.getElementById("textcolor").innerHTML = "#" + textRed + textGreen + textBlue;
+  document.body.style.color = "#" + textRed + textGreen + textBlue;  
   const hexp = p.toString(16);
-  //document.getElementById("number").innerHTML = p;
+  document.getElementById("number").innerHTML = "Counter: " + p;
   document.getElementById("color").innerHTML = "color: #" + red + green + blue + " (red: " + red + " green: " + green + " blue: " + blue + ")";  
   document.body.style.backgroundColor = "#" + red + green + blue; 
 }, 1);
